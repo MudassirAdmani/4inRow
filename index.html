@@ -13,13 +13,18 @@ header{margin:0 0 25px}h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:750;lette
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:19px;margin-bottom:14px}
 h2{font-size:1rem;letter-spacing:-.02em;margin:0 0 7px;font-weight:750}.small{font-size:.9rem;color:var(--muted);margin:0 0 12px}
 .status{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}.dot{height:8px;width:8px;background:#aaa;border-radius:50%;flex:none}.dot.on{background:#3d895a}.dot.wait{background:#d1a22b}
-button,textarea{font:inherit}button{border:1px solid transparent;border-radius:9px;padding:10px 13px;font-weight:650;cursor:pointer;transition:background .12s,border-color .12s}button:hover{filter:brightness(.97)}button:disabled{opacity:.42;cursor:not-allowed}.primary{background:var(--ink);color:#fff}.secondary{background:#fff;border-color:#d8d9d1;color:var(--ink)}.replay{background:var(--green);color:white}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 150px}
-textarea{display:block;width:100%;min-height:72px;resize:vertical;padding:10px 11px;border:1px solid #d9dbd2;border-radius:9px;background:#fcfcfa;color:var(--ink);margin:8px 0;overflow-wrap:anywhere;font-size:.88rem}
+button,textarea,input{font:inherit}button{border:1px solid transparent;border-radius:9px;padding:10px 13px;font-weight:650;cursor:pointer;transition:background .12s,border-color .12s}button:hover{filter:brightness(.97)}button:disabled{opacity:.42;cursor:not-allowed}.primary{background:var(--ink);color:#fff}.secondary{background:#fff;border-color:#d8d9d1;color:var(--ink)}.replay{background:var(--green);color:white}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 150px}
+textarea,input[type="text"]{display:block;width:100%;padding:10px 11px;border:1px solid #d9dbd2;border-radius:9px;background:#fcfcfa;color:var(--ink);overflow-wrap:anywhere;font-size:.88rem}
+textarea{min-height:72px;resize:vertical;margin:8px 0}
 details{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}summary{cursor:pointer;font-weight:700;font-size:.92rem}details p{font-size:.88rem;color:var(--muted);margin:8px 0}
 .steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.step{border:1px solid var(--line);border-radius:11px;padding:13px;min-width:0}.step-label{font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:7px}
 .game-card{padding:18px}.game-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.player{display:flex;align-items:center;gap:8px;font-weight:700}.disc{width:13px;height:13px;border-radius:50%;display:inline-block;background:#ccc;flex:none}.disc.red{background:var(--red)}.disc.yellow{background:var(--yellow);border:1px solid #d5ae36}.score{font-size:.88rem;color:var(--muted);white-space:nowrap}.score b{color:var(--ink);font-weight:750}
 .notice{background:#f7f7f3;border:1px solid var(--line);padding:11px 12px;border-radius:9px;margin:14px 0;font-size:.93rem}
-.board-wrap{background:var(--board);border-radius:12px;padding:9px;max-width:540px;margin:0 auto 15px}.board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.slot{border:0;background:transparent;padding:0;aspect-ratio:1;min-width:0;display:grid;place-items:center;border-radius:50%}.hole{width:86%;height:86%;border-radius:50%;background:#f6f5f1;box-shadow:inset 0 1px 2px #162a4255}.slot.red .hole{background:var(--red);box-shadow:inset 0 1px 2px #6c211e44}.slot.yellow .hole{background:var(--yellow);box-shadow:inset 0 1px 2px #876d1844}.slot.win .hole{outline:3px solid #fff;outline-offset:1px}.slot:disabled{cursor:default}.slot:not(:disabled):hover{background:#ffffff24}
+.board-wrap{background:var(--board);border-radius:12px;padding:9px;max-width:540px;margin:0 auto 15px;position:relative;overflow:hidden}.board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;position:relative;z-index:1}.slot{border:0;background:transparent;padding:0;aspect-ratio:1;min-width:0;display:grid;place-items:center;border-radius:50%;position:relative}.hole{width:86%;height:86%;border-radius:50%;background:#f6f5f1;box-shadow:inset 0 1px 2px #162a4255;transition:transform 0.15s ease-out, background-color 0.1s}.slot.red .hole{background:var(--red);box-shadow:inset 0 1px 2px #6c211e44}.slot.yellow .hole{background:var(--yellow);box-shadow:inset 0 1px 2px #876d1844}.slot.win .hole{outline:3px solid #fff;outline-offset:1px}.slot.last-move .hole{box-shadow:0 0 0 3px #fff, inset 0 1px 2px #00000044;animation:pulse 1.2s infinite alternate}.slot:disabled{cursor:default}.slot:not(:disabled):hover{background:#ffffff24}
+@keyframes pulse{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+@keyframes dropAnim{0%{transform:translateY(var(--drop-y)) scaleY(1.1)}70%{transform:translateY(0) scaleY(0.95)}85%{transform:translateY(-6px) scaleY(1.02)}100%{transform:translateY(0) scaleY(1)}}
+.animating .hole{animation:dropAnim 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards}
+.chat-section{margin-top:14px}.chat-box{height:140px;overflow-y:auto;border:1px solid var(--line);background:#fafaf7;border-radius:9px;padding:8px 11px;font-size:.88rem;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}.chat-msg{line-height:1.35;word-break:break-word}.chat-msg b{font-weight:700}.chat-msg.me b{color:var(--board)}.chat-msg.them b{color:var(--red)}.chat-input-row{display:flex;gap:8px}.chat-input-row input{flex:1}
 .actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.footnote{font-size:.82rem;color:var(--muted);text-align:center;margin-top:20px}
 @media(max-width:540px){main{width:min(100% - 18px,720px);padding-top:23px}.card{padding:14px}.steps{grid-template-columns:1fr}.board-wrap{padding:6px}.board{gap:4px}.game-card{padding:12px}.slot{border-radius:50%}}
 </style>
@@ -73,7 +78,17 @@ details{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}summar
   </div>
   <div id="message" class="notice" role="status" aria-live="polite">Connect with your friend to start a game. Red goes first.</div>
   <div class="board-wrap"><div id="board" class="board" aria-label="Four in a Row board"></div></div>
-  <div class="actions"><button id="replay" class="replay" disabled>Play another round</button><button id="resetScores" class="secondary" disabled>Reset score</button></div>
+  
+  <div class="chat-section">
+    <div class="small" style="margin-bottom:4px;font-weight:700">GAME CHAT</div>
+    <div id="chatBox" class="chat-box"></div>
+    <form id="chatForm" class="chat-input-row">
+      <input id="chatInput" type="text" placeholder="Type a message..." disabled />
+      <button id="chatSend" type="submit" class="primary" disabled>Send</button>
+    </form>
+  </div>
+
+  <div class="actions" style="margin-top:14px"><button id="replay" class="replay" disabled>Play another round</button><button id="resetScores" class="secondary" disabled>Reset score</button></div>
 </section>
 <p class="footnote">No account needed. The game runs in your browser.</p>
 </main>
@@ -81,56 +96,219 @@ details{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}summar
 (()=>{
 const $=id=>document.getElementById(id),W=7,H=6;
 let pc=null,channel=null,isHost=false,connected=false,myPiece='R';
-let grid=Array(H*W).fill(''),turn='R',over=false,scores={R:0,Y:0},winning=[];
+let grid=Array(H*W).fill(''),turn='R',over=false,scores={R:0,Y:0},winning=[],lastMoveIndex=-1,animatingIndex=-1;
 const label={R:'Red',Y:'Yellow'},wins=[];
 for(let r=0;r<H;r++)for(let c=0;c<W;c++)for(const [dr,dc] of [[0,1],[1,0],[1,1],[1,-1]]){
  const line=[];for(let k=0;k<4;k++){const rr=r+dr*k,cc=c+dc*k;if(rr<0||rr>=H||cc<0||cc>=W)break;line.push(rr*W+cc)}if(line.length===4)wins.push(line);
 }
+
+// Web Audio API Synthesizer
+let audioCtx = null;
+function initAudio(){if(!audioCtx){audioCtx = new (window.AudioContext || window.webkitAudioContext)();}}
+function playSound(type){
+ try{
+  initAudio();if(audioCtx.state==='suspended')audioCtx.resume();
+  const now = audioCtx.currentTime;
+  if(type === 'drop'){
+   const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+   osc.type = 'sine';
+   osc.frequency.setValueAtTime(220, now);
+   osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+   gain.gain.setValueAtTime(0.4, now);
+   gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+   osc.connect(gain);gain.connect(audioCtx.destination);
+   osc.start(now);osc.stop(now + 0.12);
+  } else if(type === 'win'){
+   [261.63, 329.63, 392.00, 523.25].forEach((freq, idx) => {
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+    gain.gain.setValueAtTime(0.3, now + idx * 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.25);
+    osc.connect(gain);gain.connect(audioCtx.destination);
+    osc.start(now + idx * 0.1);osc.stop(now + idx * 0.1 + 0.25);
+   });
+  } else if(type === 'chat'){
+   const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+   osc.type = 'sine';
+   osc.frequency.setValueAtTime(587.33, now);
+   osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+   gain.gain.setValueAtTime(0.15, now);
+   gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+   osc.connect(gain);gain.connect(audioCtx.destination);
+   osc.start(now);osc.stop(now + 0.08);
+  }
+ }catch(e){}
+}
+
 function setStatus(t,mode=''){$('connectionStatus').textContent=t;$('dot').className='dot '+mode}
 function say(t){$('message').textContent=t}
 function getResult(){for(const line of wins)if(grid[line[0]]&&line.every(i=>grid[i]===grid[line[0]]))return{piece:grid[line[0]],line};return grid.every(Boolean)?{piece:'D',line:[]}:null}
 function canDrop(c){return grid[c]===''}
 function landing(c){for(let r=H-1;r>=0;r--)if(!grid[r*W+c])return r*W+c;return-1}
+
 function render(){
  const board=$('board');board.innerHTML='';
  for(let r=0;r<H;r++)for(let c=0;c<W;c++){
-  const i=r*W+c,b=document.createElement('button');b.className='slot'+(grid[i]==='R'?' red':grid[i]==='Y'?' yellow':'')+(winning.includes(i)?' win':'');
+  const i=r*W+c,b=document.createElement('button');
+  const isLast = (i === lastMoveIndex);
+  const isAnim = (i === animatingIndex);
+  b.className='slot'+(grid[i]==='R'?' red':grid[i]==='Y'?' yellow':'')+(winning.includes(i)?' win':'')+(isLast?' last-move':'')+(isAnim?' animating':'');
+  if(isAnim){
+   const dropDistance = (r + 1) * -52;
+   b.style.setProperty('--drop-y', dropDistance + 'px');
+  }
   b.setAttribute('aria-label',`Row ${r+1}, column ${c+1}${grid[i]?', '+label[grid[i]]:''}`);
   b.disabled=!connected||over||turn!==myPiece||!canDrop(c);b.innerHTML='<span class="hole"></span>';b.addEventListener('click',()=>play(c));board.appendChild(b);
  }
  $('redScore').textContent=scores.R;$('yellowScore').textContent=scores.Y;
  $('myToken').className='disc '+(myPiece==='R'?'red':'yellow');$('myLabel').textContent=connected?label[myPiece]:'Connect to start';
  $('replay').disabled=!connected||!over;$('resetScores').disabled=!connected;
+ $('chatInput').disabled=!connected;$('chatSend').disabled=!connected;
 }
+
+function appendChat(sender, text, isMe){
+ const box = $('chatBox');
+ const div = document.createElement('div');
+ div.className = 'chat-msg ' + (isMe ? 'me' : 'them');
+ div.innerHTML = `<b>${sender}:</b> `;
+ div.appendChild(document.createTextNode(text));
+ box.appendChild(div);
+ box.scrollTop = box.scrollHeight;
+ if(!isMe) playSound('chat');
+}
+
 function send(o){if(channel&&channel.readyState==='open')channel.send(JSON.stringify(o))}
 function finishMove(shouldSend=true){
  const res=getResult();winning=res?res.line:[];
- if(res){over=true;if(res.piece==='D')say("It's a draw. Ready for another round?");else say(label[res.piece]+' wins! '+(res.piece===myPiece?'Well played.':'Good game — try to get them next time.'));if(res.piece!=='D')scores[res.piece]++;}
- else say(turn===myPiece?'Your turn. Choose a column.':"Your friend's turn.");
- render();if(shouldSend)send({type:'state',grid,turn,over,scores,winning,message:$('message').textContent});
+ playSound('drop');
+ if(res){
+  over=true;
+  if(res.piece==='D')say("It's a draw. Ready for another round?");
+  else{say(label[res.piece]+' wins! '+(res.piece===myPiece?'Well played.':'Good game — try to get them next time.'));playSound('win');}
+  if(res.piece!=='D')scores[res.piece]++;
+ } else say(turn===myPiece?'Your turn. Choose a column.':"Your friend's turn.");
+ render();if(shouldSend)send({type:'state',grid,turn,over,scores,winning,lastMoveIndex,message:$('message').textContent});
 }
-function play(c){if(!connected||over||turn!==myPiece)return;const i=landing(c);if(i<0)return;grid[i]=myPiece;turn=turn==='R'?'Y':'R';finishMove(false);send({type:'move',index:i,piece:myPiece})}
-function newRound(notify=true){grid=Array(H*W).fill('');turn='R';over=false;winning=[];say('New round. Red goes first.');render();if(notify)send({type:'reset',scores})}
+
+function play(c){
+ if(!connected||over||turn!==myPiece)return;
+ const i=landing(c);if(i<0)return;
+ grid[i]=myPiece;turn=turn==='R'?'Y':'R';lastMoveIndex=i;animatingIndex=i;
+ finishMove(false);
+ send({type:'move',index:i,piece:myPiece});
+ setTimeout(()=>{animatingIndex=-1;render();}, 400);
+}
+
+function newRound(notify=true){
+ grid=Array(H*W).fill('');turn='R';over=false;winning=[];lastMoveIndex=-1;animatingIndex=-1;
+ say('New round. Red goes first.');render();if(notify)send({type:'reset',scores})
+}
+
 function handleData(raw){
  try{const d=JSON.parse(raw);
-  if(d.type==='move'&&connected&&!over&&Number.isInteger(d.index)&&d.index>=0&&d.index<grid.length&&!grid[d.index]&&d.piece===turn&&d.piece!==myPiece&&landing(d.index%W)===d.index){grid[d.index]=d.piece;turn=turn==='R'?'Y':'R';finishMove(true)}
-  else if(d.type==='state'&&Array.isArray(d.grid)&&d.grid.length===H*W){grid=d.grid.map(v=>v==='R'||v==='Y'?v:'');turn=d.turn==='Y'?'Y':'R';over=!!d.over;scores={R:Number(d.scores?.R)||0,Y:Number(d.scores?.Y)||0};winning=Array.isArray(d.winning)?d.winning:[];say(typeof d.message==='string'?d.message:'Game updated.');render()}
+  if(d.type==='move'&&connected&&!over&&Number.isInteger(d.index)&&d.index>=0&&d.index<grid.length&&!grid[d.index]&&d.piece===turn&&d.piece!==myPiece&&landing(d.index%W)===d.index){
+   grid[d.index]=d.piece;turn=turn==='R'?'Y':'R';lastMoveIndex=d.index;animatingIndex=d.index;
+   finishMove(true);
+   setTimeout(()=>{animatingIndex=-1;render();}, 400);
+  }
+  else if(d.type==='state'&&Array.isArray(d.grid)&&d.grid.length===H*W){
+   grid=d.grid.map(v=>v==='R'||v==='Y'?v:'');turn=d.turn==='Y'?'Y':'R';over=!!d.over;scores={R:Number(d.scores?.R)||0,Y:Number(d.scores?.Y)||0};
+   winning=Array.isArray(d.winning)?d.winning:[];lastMoveIndex=Number.isInteger(d.lastMoveIndex)?d.lastMoveIndex:-1;
+   say(typeof d.message==='string'?d.message:'Game updated.');render();
+  }
   else if(d.type==='reset'){scores={R:Number(d.scores?.R)||0,Y:Number(d.scores?.Y)||0};newRound(false)}
   else if(d.type==='score-reset'){scores={R:0,Y:0};render()}
+  else if(d.type==='chat'&&typeof d.text==='string'){appendChat(label[myPiece==='R'?'Y':'R'], d.text, false)}
  }catch(e){console.warn('Ignored invalid game message',e)}
 }
-function attach(ch){channel=ch;channel.onopen=()=>{connected=true;myPiece=isHost?'R':'Y';setStatus('Connected — you are '+label[myPiece]+'.','on');grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];say(isHost?"You're Red. You go first.":"You're Yellow. Red goes first.");render();$('connectDetails').open=false;if(isHost)send({type:'state',grid,turn,over,scores,winning,message:'Red goes first.'})};channel.onmessage=e=>handleData(e.data);channel.onclose=()=>{connected=false;setStatus('Connection closed. Start over to reconnect.','wait');render()};channel.onerror=()=>setStatus('Connection error. Try exchanging the codes again.','wait')}
-function newPeer(){if(pc){try{pc.close()}catch{}}pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')setStatus('Could not connect. Your network may block direct connections.','wait')};return pc}
-const waitIce=p=>new Promise(resolve=>{if(p.iceGatheringState==='complete')return resolve();const timer=setTimeout(done,10000);function done(){clearTimeout(timer);p.removeEventListener('icegatheringstatechange',check);resolve()}function check(){if(p.iceGatheringState==='complete')done()}p.addEventListener('icegatheringstatechange',check)});
+
+function attach(ch){
+ channel=ch;
+ channel.onopen=()=>{
+  connected=true;myPiece=isHost?'R':'Y';setStatus('Connected — you are '+label[myPiece]+'.','on');
+  grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];lastMoveIndex=-1;
+  say(isHost?"You're Red. You go first.":"You're Yellow. Red goes first.");
+  render();$('connectDetails').open=false;
+  if(isHost)send({type:'state',grid,turn,over,scores,winning,lastMoveIndex,message:'Red goes first.'})
+ };
+ channel.onmessage=e=>handleData(e.data);
+ channel.onclose=()=>{connected=false;setStatus('Connection closed. Start over to reconnect.','wait');render()};
+ channel.onerror=()=>setStatus('Connection error. Try exchanging the codes again.','wait');
+}
+
+function newPeer(){
+ if(pc){try{pc.close()}catch{}}
+ pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});
+ pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')setStatus('Could not connect. Your network may block direct connections.','wait')};
+ return pc;
+}
+
+const waitIce=p=>new Promise(resolve=>{
+ if(p.iceGatheringState==='complete')return resolve();
+ const timer=setTimeout(done,10000);
+ function done(){clearTimeout(timer);p.removeEventListener('icegatheringstatechange',check);resolve()}
+ function check(){if(p.iceGatheringState==='complete')done()}
+ p.addEventListener('icegatheringstatechange',check);
+});
+
 const encode=o=>btoa(JSON.stringify(o)),decode=s=>JSON.parse(atob(s.trim()));
-async function createOffer(){try{isHost=true;connected=false;setStatus('Creating invite…','wait');const p=newPeer();attach(p.createDataChannel('four-in-a-row'));await p.setLocalDescription(await p.createOffer());await waitIce(p);$('offerText').value=encode(p.localDescription);setStatus('Invite ready. Send it to your friend.','wait')}catch(e){console.error(e);setStatus('Could not create invite. Please try again.','wait')}}
-async function createAnswer(){try{isHost=false;connected=false;setStatus('Making reply code…','wait');const p=newPeer();p.ondatachannel=e=>attach(e.channel);await p.setRemoteDescription(decode($('remoteOffer').value));await p.setLocalDescription(await p.createAnswer());await waitIce(p);$('answerText').value=encode(p.localDescription);setStatus('Reply ready. Send it back to your friend.','wait')}catch(e){console.error(e);setStatus('Could not read that invite. Check you copied all the text.','wait')}}
-async function finish(){try{if(!pc||!isHost)throw Error();await pc.setRemoteDescription(decode($('remoteAnswer').value));setStatus('Connecting… this can take a moment.','wait')}catch(e){console.error(e);setStatus('Could not read that reply. Check you copied all the text.','wait')}}
-function copy(id){const el=$(id);if(!el.value)return;el.select();el.setSelectionRange(0,el.value.length);if(navigator.clipboard&&isSecureContext)navigator.clipboard.writeText(el.value).then(()=>say('Copied. You can paste it into your chat.')).catch(()=>say('Code selected. Copy it and send it to your friend.'));else say('Code selected. Copy it and send it to your friend.')}
-$('createOffer').onclick=createOffer;$('createAnswer').onclick=createAnswer;$('finishConnection').onclick=finish;$('copyOffer').onclick=()=>copy('offerText');$('copyAnswer').onclick=()=>copy('answerText');
+
+async function createOffer(){
+ try{
+  isHost=true;connected=false;setStatus('Creating invite…','wait');
+  const p=newPeer();attach(p.createDataChannel('four-in-a-row'));
+  await p.setLocalDescription(await p.createOffer());await waitIce(p);
+  $('offerText').value=encode(p.localDescription);setStatus('Invite ready. Send it to your friend.','wait');
+ }catch(e){console.error(e);setStatus('Could not create invite. Please try again.','wait')}
+}
+
+async function createAnswer(){
+ try{
+  isHost=false;connected=false;setStatus('Making reply code…','wait');
+  const p=newPeer();p.ondatachannel=e=>attach(e.channel);
+  await p.setRemoteDescription(decode($('remoteOffer').value));
+  await p.setLocalDescription(await p.createAnswer());await waitIce(p);
+  $('answerText').value=encode(p.localDescription);setStatus('Reply ready. Send it back to your friend.','wait');
+ }catch(e){console.error(e);setStatus('Could not read that invite. Check you copied all the text.','wait')}
+}
+
+async function finish(){
+ try{
+  if(!pc||!isHost)throw Error();
+  await pc.setRemoteDescription(decode($('remoteAnswer').value));
+  setStatus('Connecting… this can take a moment.','wait');
+ }catch(e){console.error(e);setStatus('Could not read that reply. Check you copied all the text.','wait')}
+}
+
+function copy(id){
+ const el=$(id);if(!el.value)return;el.select();el.setSelectionRange(0,el.value.length);
+ if(navigator.clipboard&&isSecureContext)navigator.clipboard.writeText(el.value).then(()=>say('Copied. You can paste it into your chat.')).catch(()=>say('Code selected. Copy it and send it to your friend.'));
+ else say('Code selected. Copy it and send it to your friend.');
+}
+
+$('createOffer').onclick=createOffer;$('createAnswer').onclick=createAnswer;$('finishConnection').onclick=finish;
+$('copyOffer').onclick=()=>copy('offerText');$('copyAnswer').onclick=()=>copy('answerText');
 $('replay').onclick=()=>{if(connected&&over)newRound(true)};
 $('resetScores').onclick=()=>{if(!connected)return;scores={R:0,Y:0};say('Score reset.');render();send({type:'score-reset'})};
-$('resetConnection').onclick=()=>{if(pc)pc.close();pc=null;channel=null;connected=false;isHost=false;myPiece='R';grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];['offerText','remoteOffer','answerText','remoteAnswer'].forEach(id=>$(id).value='');$('connectDetails').open=true;setStatus('Not connected yet');say('Start over by creating a new invite.');render()};
+
+$('chatForm').onsubmit=(e)=>{
+ e.preventDefault();
+ const inp = $('chatInput'), val = inp.value.trim();
+ if(!val||!connected)return;
+ appendChat('You', val, true);
+ send({type:'chat', text:val});
+ inp.value='';
+};
+
+$('resetConnection').onclick=()=>{
+ if(pc)pc.close();pc=null;channel=null;connected=false;isHost=false;myPiece='R';
+ grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];lastMoveIndex=-1;animatingIndex=-1;
+ ['offerText','remoteOffer','answerText','remoteAnswer','chatInput'].forEach(id=>$(id).value='');
+ $('chatBox').innerHTML='';$('connectDetails').open=true;setStatus('Not connected yet');
+ say('Start over by creating a new invite.');render();
+};
+
 render();
 })();
 </script>
