@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f5f1">
+<title>Four in a Row</title>
+<style>
+:root{--paper:#f6f5f1;--card:#fff;--ink:#252822;--muted:#73766e;--line:#e5e4dd;--board:#315b8a;--red:#d84b43;--yellow:#f1c94b;--green:#31664b;--soft:#edf1e9}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{width:min(100% - 28px,720px);margin:0 auto;padding:34px 0 48px}
+header{margin:0 0 25px}h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:750;letter-spacing:-.055em;line-height:1.05;margin:0 0 9px}header p{margin:0;color:var(--muted);font-size:1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:19px;margin-bottom:14px}
+h2{font-size:1rem;letter-spacing:-.02em;margin:0 0 7px;font-weight:750}.small{font-size:.9rem;color:var(--muted);margin:0 0 12px}
+.status{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}.dot{height:8px;width:8px;background:#aaa;border-radius:50%;flex:none}.dot.on{background:#3d895a}.dot.wait{background:#d1a22b}
+button,textarea{font:inherit}button{border:1px solid transparent;border-radius:9px;padding:10px 13px;font-weight:650;cursor:pointer;transition:background .12s,border-color .12s}button:hover{filter:brightness(.97)}button:disabled{opacity:.42;cursor:not-allowed}.primary{background:var(--ink);color:#fff}.secondary{background:#fff;border-color:#d8d9d1;color:var(--ink)}.replay{background:var(--green);color:white}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 150px}
+textarea{display:block;width:100%;min-height:72px;resize:vertical;padding:10px 11px;border:1px solid #d9dbd2;border-radius:9px;background:#fcfcfa;color:var(--ink);margin:8px 0;overflow-wrap:anywhere;font-size:.88rem}
+details{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}summary{cursor:pointer;font-weight:700;font-size:.92rem}details p{font-size:.88rem;color:var(--muted);margin:8px 0}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.step{border:1px solid var(--line);border-radius:11px;padding:13px;min-width:0}.step-label{font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:7px}
+.game-card{padding:18px}.game-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.player{display:flex;align-items:center;gap:8px;font-weight:700}.disc{width:13px;height:13px;border-radius:50%;display:inline-block;background:#ccc;flex:none}.disc.red{background:var(--red)}.disc.yellow{background:var(--yellow);border:1px solid #d5ae36}.score{font-size:.88rem;color:var(--muted);white-space:nowrap}.score b{color:var(--ink);font-weight:750}
+.notice{background:#f7f7f3;border:1px solid var(--line);padding:11px 12px;border-radius:9px;margin:14px 0;font-size:.93rem}
+.board-wrap{background:var(--board);border-radius:12px;padding:9px;max-width:540px;margin:0 auto 15px}.board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.slot{border:0;background:transparent;padding:0;aspect-ratio:1;min-width:0;display:grid;place-items:center;border-radius:50%}.hole{width:86%;height:86%;border-radius:50%;background:#f6f5f1;box-shadow:inset 0 1px 2px #162a4255}.slot.red .hole{background:var(--red);box-shadow:inset 0 1px 2px #6c211e44}.slot.yellow .hole{background:var(--yellow);box-shadow:inset 0 1px 2px #876d1844}.slot.win .hole{outline:3px solid #fff;outline-offset:1px}.slot:disabled{cursor:default}.slot:not(:disabled):hover{background:#ffffff24}
+.actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.footnote{font-size:.82rem;color:var(--muted);text-align:center;margin-top:20px}
+@media(max-width:540px){main{width:min(100% - 18px,720px);padding-top:23px}.card{padding:14px}.steps{grid-template-columns:1fr}.board-wrap{padding:6px}.board{gap:4px}.game-card{padding:12px}.slot{border-radius:50%}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Four in a Row</h1>
+  <p>A little game for two people. Take turns, connect four, and play again.</p>
+</header>
+
+<section class="card">
+  <div class="status"><span id="dot" class="dot"></span><span id="connectionStatus">Not connected yet</span></div>
+  <details id="connectDetails" open>
+    <summary>Connect with a friend</summary>
+    <p>Only one of you needs to create an invite. Send the text to your friend in WhatsApp or any chat. They send you a reply code, and you're ready to play.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-label">For the person inviting</div>
+        <h2>1. Create an invite</h2>
+        <p class="small">Click below and send the code to your friend.</p>
+        <button id="createOffer" class="primary">Create invite</button>
+        <textarea id="offerText" placeholder="Your invite code will appear here" aria-label="Invite code"></textarea>
+        <button id="copyOffer" class="secondary">Copy invite code</button>
+      </div>
+      <div class="step">
+        <div class="step-label">For the friend joining</div>
+        <h2>2. Join the game</h2>
+        <p class="small">Paste the invite you received, then make a reply code.</p>
+        <textarea id="remoteOffer" placeholder="Paste your friend's invite code here" aria-label="Friend's invite code"></textarea>
+        <button id="createAnswer" class="primary">Make reply code</button>
+        <textarea id="answerText" placeholder="Your reply code will appear here" aria-label="Reply code"></textarea>
+        <button id="copyAnswer" class="secondary">Copy reply code</button>
+      </div>
+    </div>
+    <div class="step" style="margin-top:12px">
+      <div class="step-label">Back to the person inviting</div>
+      <h2>3. Connect</h2>
+      <p class="small">Paste your friend's reply code here and click connect.</p>
+      <textarea id="remoteAnswer" placeholder="Paste your friend's reply code here" aria-label="Friend's reply code"></textarea>
+      <div class="row"><button id="finishConnection" class="primary">Connect</button><button id="resetConnection" class="secondary">Start over</button></div>
+    </div>
+    <p class="small" style="margin:12px 0 0">You only do this once. After you're connected, you can play as many rounds as you like without repeating these steps. Keep this page open while playing.</p>
+  </details>
+</section>
+
+<section class="card game-card">
+  <div class="game-head">
+    <div><div class="small" style="margin-bottom:4px">YOUR COLOUR</div><div class="player"><span id="myToken" class="disc red"></span><span id="myLabel">Connect to start</span></div></div>
+    <div class="score">Red <b id="redScore">0</b> &nbsp;·&nbsp; Yellow <b id="yellowScore">0</b></div>
+  </div>
+  <div id="message" class="notice" role="status" aria-live="polite">Connect with your friend to start a game. Red goes first.</div>
+  <div class="board-wrap"><div id="board" class="board" aria-label="Four in a Row board"></div></div>
+  <div class="actions"><button id="replay" class="replay" disabled>Play another round</button><button id="resetScores" class="secondary" disabled>Reset score</button></div>
+</section>
+<p class="footnote">No account needed. The game runs in your browser.</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),W=7,H=6;
+let pc=null,channel=null,isHost=false,connected=false,myPiece='R';
+let grid=Array(H*W).fill(''),turn='R',over=false,scores={R:0,Y:0},winning=[];
+const label={R:'Red',Y:'Yellow'},wins=[];
+for(let r=0;r<H;r++)for(let c=0;c<W;c++)for(const [dr,dc] of [[0,1],[1,0],[1,1],[1,-1]]){
+ const line=[];for(let k=0;k<4;k++){const rr=r+dr*k,cc=c+dc*k;if(rr<0||rr>=H||cc<0||cc>=W)break;line.push(rr*W+cc)}if(line.length===4)wins.push(line);
+}
+function setStatus(t,mode=''){$('connectionStatus').textContent=t;$('dot').className='dot '+mode}
+function say(t){$('message').textContent=t}
+function getResult(){for(const line of wins)if(grid[line[0]]&&line.every(i=>grid[i]===grid[line[0]]))return{piece:grid[line[0]],line};return grid.every(Boolean)?{piece:'D',line:[]}:null}
+function canDrop(c){return grid[c]===''}
+function landing(c){for(let r=H-1;r>=0;r--)if(!grid[r*W+c])return r*W+c;return-1}
+function render(){
+ const board=$('board');board.innerHTML='';
+ for(let r=0;r<H;r++)for(let c=0;c<W;c++){
+  const i=r*W+c,b=document.createElement('button');b.className='slot'+(grid[i]==='R'?' red':grid[i]==='Y'?' yellow':'')+(winning.includes(i)?' win':'');
+  b.setAttribute('aria-label',`Row ${r+1}, column ${c+1}${grid[i]?', '+label[grid[i]]:''}`);
+  b.disabled=!connected||over||turn!==myPiece||!canDrop(c);b.innerHTML='<span class="hole"></span>';b.addEventListener('click',()=>play(c));board.appendChild(b);
+ }
+ $('redScore').textContent=scores.R;$('yellowScore').textContent=scores.Y;
+ $('myToken').className='disc '+(myPiece==='R'?'red':'yellow');$('myLabel').textContent=connected?label[myPiece]:'Connect to start';
+ $('replay').disabled=!connected||!over;$('resetScores').disabled=!connected;
+}
+function send(o){if(channel&&channel.readyState==='open')channel.send(JSON.stringify(o))}
+function finishMove(shouldSend=true){
+ const res=getResult();winning=res?res.line:[];
+ if(res){over=true;if(res.piece==='D')say("It's a draw. Ready for another round?");else say(label[res.piece]+' wins! '+(res.piece===myPiece?'Well played.':'Good game — try to get them next time.'));if(res.piece!=='D')scores[res.piece]++;}
+ else say(turn===myPiece?'Your turn. Choose a column.':"Your friend's turn.");
+ render();if(shouldSend)send({type:'state',grid,turn,over,scores,winning,message:$('message').textContent});
+}
+function play(c){if(!connected||over||turn!==myPiece)return;const i=landing(c);if(i<0)return;grid[i]=myPiece;turn=turn==='R'?'Y':'R';finishMove(false);send({type:'move',index:i,piece:myPiece})}
+function newRound(notify=true){grid=Array(H*W).fill('');turn='R';over=false;winning=[];say('New round. Red goes first.');render();if(notify)send({type:'reset',scores})}
+function handleData(raw){
+ try{const d=JSON.parse(raw);
+  if(d.type==='move'&&connected&&!over&&Number.isInteger(d.index)&&d.index>=0&&d.index<grid.length&&!grid[d.index]&&d.piece===turn&&d.piece!==myPiece&&landing(d.index%W)===d.index){grid[d.index]=d.piece;turn=turn==='R'?'Y':'R';finishMove(true)}
+  else if(d.type==='state'&&Array.isArray(d.grid)&&d.grid.length===H*W){grid=d.grid.map(v=>v==='R'||v==='Y'?v:'');turn=d.turn==='Y'?'Y':'R';over=!!d.over;scores={R:Number(d.scores?.R)||0,Y:Number(d.scores?.Y)||0};winning=Array.isArray(d.winning)?d.winning:[];say(typeof d.message==='string'?d.message:'Game updated.');render()}
+  else if(d.type==='reset'){scores={R:Number(d.scores?.R)||0,Y:Number(d.scores?.Y)||0};newRound(false)}
+  else if(d.type==='score-reset'){scores={R:0,Y:0};render()}
+ }catch(e){console.warn('Ignored invalid game message',e)}
+}
+function attach(ch){channel=ch;channel.onopen=()=>{connected=true;myPiece=isHost?'R':'Y';setStatus('Connected — you are '+label[myPiece]+'.','on');grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];say(isHost?'You're Red. You go first.':'You’re Yellow. Red goes first.');render();$('connectDetails').open=false;if(isHost)send({type:'state',grid,turn,over,scores,winning,message:'Red goes first.'})};channel.onmessage=e=>handleData(e.data);channel.onclose=()=>{connected=false;setStatus('Connection closed. Start over to reconnect.','wait');render()};channel.onerror=()=>setStatus('Connection error. Try exchanging the codes again.','wait')}
+function newPeer(){if(pc){try{pc.close()}catch{}}pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]});pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed')setStatus('Could not connect. Your network may block direct connections.','wait')};return pc}
+const waitIce=p=>new Promise(resolve=>{if(p.iceGatheringState==='complete')return resolve();const timer=setTimeout(done,10000);function done(){clearTimeout(timer);p.removeEventListener('icegatheringstatechange',check);resolve()}function check(){if(p.iceGatheringState==='complete')done()}p.addEventListener('icegatheringstatechange',check)});
+const encode=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))),decode=s=>JSON.parse(decodeURIComponent(escape(atob(s.trim()))));
+async function createOffer(){try{isHost=true;connected=false;setStatus('Creating invite…','wait');const p=newPeer();attach(p.createDataChannel('four-in-a-row'));await p.setLocalDescription(await p.createOffer());await waitIce(p);$('offerText').value=encode(p.localDescription);setStatus('Invite ready. Send it to your friend.','wait')}catch(e){setStatus('Could not create invite. Please try again.','wait')}}
+async function createAnswer(){try{isHost=false;connected=false;setStatus('Making reply code…','wait');const p=newPeer();p.ondatachannel=e=>attach(e.channel);await p.setRemoteDescription(decode($('remoteOffer').value));await p.setLocalDescription(await p.createAnswer());await waitIce(p);$('answerText').value=encode(p.localDescription);setStatus('Reply ready. Send it back to your friend.','wait')}catch(e){setStatus('Could not read that invite. Check you copied all the text.','wait')}}
+async function finish(){try{if(!pc||!isHost)throw Error();await pc.setRemoteDescription(decode($('remoteAnswer').value));setStatus('Connecting… this can take a moment.','wait')}catch(e){setStatus('Could not read that reply. Check you copied all the text.','wait')}}
+function copy(id){const el=$(id);if(!el.value)return;el.select();el.setSelectionRange(0,el.value.length);if(navigator.clipboard&&isSecureContext)navigator.clipboard.writeText(el.value).then(()=>say('Copied. You can paste it into your chat.')).catch(()=>say('Code selected. Copy it and send it to your friend.'));else say('Code selected. Copy it and send it to your friend.')}
+$('createOffer').onclick=createOffer;$('createAnswer').onclick=createAnswer;$('finishConnection').onclick=finish;$('copyOffer').onclick=()=>copy('offerText');$('copyAnswer').onclick=()=>copy('answerText');
+$('replay').onclick=()=>{if(connected&&over)newRound(true)};
+$('resetScores').onclick=()=>{if(!connected)return;scores={R:0,Y:0};say('Score reset.');render();send({type:'score-reset'})};
+$('resetConnection').onclick=()=>{if(pc)pc.close();pc=null;channel=null;connected=false;isHost=false;myPiece='R';grid=Array(H*W).fill('');turn='R';over=false;scores={R:0,Y:0};winning=[];['offerText','remoteOffer','answerText','remoteAnswer'].forEach(id=>$(id).value='');$('connectDetails').open=true;setStatus('Not connected yet');say('Start over by creating a new invite.');render()};
+render();
+})();
+</script>
+</body>
+</html>
